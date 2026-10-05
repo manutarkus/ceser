@@ -25,7 +25,7 @@
   if (reduce || !('IntersectionObserver' in window)) return;
 
   var targets = Array.prototype.filter.call(document.querySelectorAll('.e-parent'), function (el) {
-    if (el.closest('header, .elementor-location-header')) return false;
+    if (el.closest('header, .elementor-location-header, footer, .elementor-location-footer')) return false;
     var r = el.getBoundingClientRect();
     if (r.height === 0) return false;
     return r.top > window.innerHeight * 0.9;
