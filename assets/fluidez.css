@@ -1,0 +1,76 @@
+/* Efectos de fluidez: scroll suave, transición entre páginas, aparición al hacer scroll,
+   barra de progreso y microinteracciones. Se desactiva con prefers-reduced-motion. */
+
+html{ scroll-behavior:smooth; }
+
+/* Transición entre páginas (navegadores con View Transitions; el resto ignora la regla) */
+@view-transition{ navigation:auto; }
+::view-transition-old(root),
+::view-transition-new(root){ animation-duration:.3s; animation-timing-function:ease; }
+
+/* Entrada suave de cada página */
+body{ animation:fx-page-in .6s ease both; }
+@keyframes fx-page-in{ from{ opacity:0; } to{ opacity:1; } }
+
+/* Aparición al hacer scroll */
+.fx-reveal{
+  opacity:0;
+  transform:translateY(32px);
+  transition:opacity .9s cubic-bezier(.2,.7,.2,1), transform .9s cubic-bezier(.2,.7,.2,1);
+}
+.fx-reveal.fx-in{ opacity:1; transform:none; }
+
+/* Barra de progreso de lectura */
+.fx-progress{
+  position:fixed;
+  top:0;
+  left:0;
+  z-index:100001;
+  width:100%;
+  height:3px;
+  background:linear-gradient(90deg, #20788d, #10277b);
+  transform-origin:0 50%;
+  transform:scaleX(0);
+  pointer-events:none;
+}
+
+/* Botones: elevación suave */
+.elementor-button,
+.ceser-btn{
+  transition:transform .3s cubic-bezier(.2,.7,.2,1), box-shadow .3s ease !important;
+}
+.elementor-button:hover,
+.elementor-button:focus-visible{
+  transform:translateY(-4px);
+  box-shadow:0 12px 20px -10px rgba(0,0,0,.45);
+}
+
+/* Imágenes de contenido: ligero zoom al pasar el mouse sin alterar el tamaño de la caja */
+.elementor-widget-image .elementor-widget-container{ overflow:hidden; border-radius:inherit; }
+.elementor-widget-image img{ transition:transform .6s cubic-bezier(.2,.7,.2,1); }
+.elementor-widget-image:hover img{ transform:scale(1.04); }
+
+/* Enlaces del menú y del pie */
+.elementor-nav-menu a,
+footer a{ transition:color .25s ease, opacity .25s ease; }
+
+/* Botón flotante de WhatsApp: pulso suave */
+.ceser-wa-float{ animation:fx-pulse 2.8s ease-out infinite; }
+.ceser-wa-float:hover{ animation:none; }
+@keyframes fx-pulse{
+  0%{ box-shadow:0 12px 30px -8px rgba(37,211,102,.65), 0 0 0 0 rgba(37,211,102,.45); }
+  70%{ box-shadow:0 12px 30px -8px rgba(37,211,102,.65), 0 0 0 18px rgba(37,211,102,0); }
+  100%{ box-shadow:0 12px 30px -8px rgba(37,211,102,.65), 0 0 0 0 rgba(37,211,102,0); }
+}
+
+@media (prefers-reduced-motion:reduce){
+  html{ scroll-behavior:auto; }
+  body{ animation:none; }
+  .fx-reveal{ opacity:1; transform:none; transition:none; }
+  .fx-progress{ display:none; }
+  .ceser-wa-float{ animation:none; }
+  .elementor-widget-image img{ transition:none; }
+  .elementor-widget-image:hover img{ transform:none; }
+  .elementor-button:hover{ transform:none; }
+  @view-transition{ navigation:none; }
+}
