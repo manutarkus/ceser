@@ -1,0 +1,31 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cd \"$CLAUDE_PROJECT_DIR\" && git add -A && { git diff --cached --quiet || git commit -m \"Auto-commit: $(git diff --cached --name-only | tr '\\n' ',' | sed 's/,$//' | sed 's/,/, /g' | cut -c1-200)\"; } || true",
+            "shell": "bash",
+            "timeout": 30,
+            "statusMessage": "Auto-commit de cambios..."
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cd \"$CLAUDE_PROJECT_DIR\" && git push || true",
+            "shell": "bash",
+            "timeout": 60,
+            "statusMessage": "Haciendo git push..."
+          }
+        ]
+      }
+    ]
+  }
+}
